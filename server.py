@@ -70,14 +70,23 @@ def processimage():
     boxes = text_detect(inputFilePath)
 
     textBoxes = text_recognize(inputFilePath, boxes)
-    print(textBoxes)
-    #drawTextBoxes(inputFilePath, textBoxes)
+    #print(textBoxes)
+    drawTextBoxes(inputFilePath, textBoxes)
 
     copydebugimages(path)
 
     resultFilePath = path + '/result.jpg'
     return send_file(resultFilePath, mimetype='image/jpeg')
 
+def drawTextBoxes(inputFilePath, textBoxes):
+    img = cv2.imread(inputFilePath)
+    for box in textBoxes:
+        cv2.rectangle(img, (box['startX'], box['startY']), (box['endX'], box['endY']), (0, 255, 0), 1)
+        cv2.putText(img, box['text'], (box['startX'], box['endY'] - box['startY']), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), lineType=cv2.LINE_AA)
+
+    n = inputFilePath.rfind('/')
+    resultFilePath = inputFilePath[:n] + '/result.jpg'
+    cv2.imwrite(resultFilePath, img)
 
 def text_recognize(inputFilePath, boxes):
     # Define config parameters.
@@ -234,11 +243,6 @@ def text_detect(inputFilePath):
     # show the output image
     #cv2.imshow("Text Detection", orig)
     #cv2.waitKey(0)
-
-    n = inputFilePath.rfind('/')
-    resultFilePath = inputFilePath[:n] + '/result.jpg'
-
-    cv2.imwrite(resultFilePath, orig)
 
     return scaledBoxes
 
