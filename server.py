@@ -5,6 +5,7 @@ import cv2
 from imutils.object_detection import non_max_suppression
 import numpy as np
 import pytesseract
+import shutil
 
 app = Flask(__name__, static_url_path='/static')
 app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -23,6 +24,26 @@ args = {
 @app.route('/')
 def hello_world():
     return render_template('index.html')
+
+
+def copydebugimages():
+    shutil.rmtree('static/debug')
+    os.mkdir('static/debug')
+    copied = []
+
+    for root, dirs, files in os.walk(path):
+        for currentFile in files:
+            exts = ('.jpg')
+            if currentFile.lower().endswith(exts):
+                shutil.copy(os.path.join(root, currentFile), 'static/debug/')
+                copied.append(currentFile)
+
+    return copied
+
+@app.route('/debug')
+def debug():
+    files = copydebugimages()
+    return render_template('debug.html', files=files)
 
 
 @app.route('/processimage', methods=["POST"])
@@ -72,6 +93,8 @@ def text_recognize(inputFilePath, boxes):
             'box': box,
             'text': text
         })
+
+        cropCount += 1
 
     end = time.time()
     print("[INFO] text recognition took {:.6f} seconds".format(end - start))
