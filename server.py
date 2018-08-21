@@ -26,7 +26,7 @@ def hello_world():
     return render_template('index.html')
 
 
-def copydebugimages():
+def copydebugimages(path):
     shutil.rmtree('static/debug')
     os.mkdir('static/debug')
     copied = []
@@ -40,9 +40,20 @@ def copydebugimages():
 
     return copied
 
+def getdebugimages():
+    copied = []
+
+    for root, dirs, files in os.walk('static/debug/'):
+        for currentFile in files:
+            exts = ('.jpg')
+            if currentFile.lower().endswith(exts):
+                copied.append(currentFile)
+
+    return copied
+
 @app.route('/debug')
 def debug():
-    files = copydebugimages()
+    files = getdebugimages()
     return render_template('debug.html', files=files)
 
 
@@ -61,6 +72,8 @@ def processimage():
     textBoxes = text_recognize(inputFilePath, boxes)
     print(textBoxes)
     #drawTextBoxes(inputFilePath, textBoxes)
+
+    copydebugimages(path)
 
     resultFilePath = path + '/result.jpg'
     return send_file(resultFilePath, mimetype='image/jpeg')
