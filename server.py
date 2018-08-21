@@ -80,7 +80,8 @@ def processimage():
 
 def drawTextBoxes(inputFilePath, textBoxes):
     img = cv2.imread(inputFilePath)
-    for box in textBoxes:
+    for tbox in textBoxes:
+        box = tbox['box']
         cv2.rectangle(img, (box['startX'], box['startY']), (box['endX'], box['endY']), (0, 255, 0), 1)
         cv2.putText(img, box['text'], (box['startX'], box['endY'] - box['startY']), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), lineType=cv2.LINE_AA)
 
