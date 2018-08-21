@@ -83,7 +83,7 @@ def drawTextBoxes(inputFilePath, textBoxes):
     for tbox in textBoxes:
         box = tbox['box']
         cv2.rectangle(img, (box['startX'], box['startY']), (box['endX'], box['endY']), (0, 255, 0), 1)
-        cv2.putText(img, box['text'], (box['startX'], box['endY'] - box['startY']), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), lineType=cv2.LINE_AA)
+        cv2.putText(img, tbox['text'], (box['startX'], box['endY'] - box['startY']), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), lineType=cv2.LINE_AA)
 
     n = inputFilePath.rfind('/')
     resultFilePath = inputFilePath[:n] + '/result.jpg'
