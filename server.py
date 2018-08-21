@@ -4,9 +4,13 @@ import os
 import cv2
 from imutils.object_detection import non_max_suppression
 import numpy as np
+import pytesseract
 
 app = Flask(__name__, static_url_path='/static')
 app.config['PROPAGATE_EXCEPTIONS'] = True
+
+# Uncomment the line below to provide path to tesseract manually
+#pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
 
 args = {
@@ -32,12 +36,35 @@ def processimage():
     f.save(inputFilePath)
 
     boxes = text_detect(inputFilePath)
-    print(boxes)
 
-    #text_recognize(inputFilePath, boxes)
+    textBoxes = text_recognize(inputFilePath, boxes)
+    print(textBoxes)
+    #drawTextBoxes(inputFilePath, textBoxes)
 
     resultFilePath = path + '/result.jpg'
     return send_file(resultFilePath, mimetype='image/jpeg')
+
+
+def text_recognize(inputFilePath, boxes):
+    # Define config parameters.
+    # '-l eng'  for using the English language
+    # '--oem 1' for using LSTM OCR Engine
+    config = ('-l eng --oem 1 --psm 3')
+
+    textBoxes = []
+    img = cv2.imread(inputFilePath)
+
+    for box in boxes:
+        crop = img[box.startY : box.endY, box.startX : box.endX]
+        text = pytesseract.image_to_string(crop, config=config)
+
+        textBoxes.append({
+            'box': box,
+            'text': text
+        })
+
+    return textBoxes
+
 
 def text_detect(inputFilePath):
     # load the input image and grab the image dimensions
