@@ -85,9 +85,9 @@ def text_recognize(inputFilePath, boxes):
 
         cropFilePath = cropFilePathPre + '/crop' + str(cropCount) + '.jpg'
         cv2.imwrite(cropFilePath, crop)
-        print('crop saved: '+cropFilePath)
 
         text = pytesseract.image_to_string(crop, config=config)
+        print('crop saved: '+cropFilePath+', text: '+text)
 
         textBoxes.append({
             'box': box,
