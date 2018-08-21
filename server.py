@@ -62,7 +62,7 @@ def text_recognize(inputFilePath, boxes):
     for box in boxes:
         crop = img[box['startY'] : box['endY'], box['startX'] : box['endX'], : ]
 
-        cropFilePath = cropFilePathPre + '/crop' + cropCount + '.jpg'
+        cropFilePath = cropFilePathPre + '/crop' + str(cropCount) + '.jpg'
         cv2.imwrite(cropFilePath, crop)
         print('crop saved: '+cropFilePath)
 
