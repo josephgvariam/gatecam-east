@@ -54,14 +54,27 @@ def text_recognize(inputFilePath, boxes):
     textBoxes = []
     img = cv2.imread(inputFilePath)
 
+    start = time.time()
+    cropCount = 1
+    n = inputFilePath.rfind('/')
+    cropFilePathPre = inputFilePath[:n]
+
     for box in boxes:
-        crop = img[box['startY'] : box['endY'], box['startX'] : box['endX']]
+        crop = img[box['startY'] : box['endY'], box['startX'] : box['endX'], : ]
+
+        cropFilePath = cropFilePathPre + '/crop' + cropCount + '.jpg'
+        cv2.imwrite(cropFilePath, crop)
+        print('crop saved: '+cropFilePath)
+
         text = pytesseract.image_to_string(crop, config=config)
 
         textBoxes.append({
             'box': box,
             'text': text
         })
+
+    end = time.time()
+    print("[INFO] text recognition took {:.6f} seconds".format(end - start))
 
     return textBoxes
 
