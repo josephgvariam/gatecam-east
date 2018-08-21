@@ -2,6 +2,8 @@ from flask import Flask, request, Response, render_template, send_file
 import time
 import os
 import cv2
+from imutils.object_detection import non_max_suppression
+import numpy as np
 
 app = Flask(__name__, static_url_path='/static')
 app.config['PROPAGATE_EXCEPTIONS'] = True
