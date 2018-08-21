@@ -146,7 +146,7 @@ def text_detect(inputFilePath):
         endY = int(endY * rH)
 
         # draw the bounding box on the image
-        cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 0.7)
+        cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 1)
 
         scaledBoxes.append({
             'startX': startX,
