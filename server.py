@@ -11,8 +11,8 @@ app.config['PROPAGATE_EXCEPTIONS'] = True
 
 args = {
     'min_confidence': 0.5,
-    'width': 320,
-    'height': 320,
+    'width': 640,
+    'height': 640,
     'east': 'frozen_east_text_detection.pb'
 }
 
@@ -160,7 +160,7 @@ def text_detect(inputFilePath):
     #cv2.waitKey(0)
 
     n = inputFilePath.rfind('/')
-    resultFilePath = inputFilePath[:n] + 'result.jpg'
+    resultFilePath = inputFilePath[:n] + '/result.jpg'
 
     cv2.imwrite(resultFilePath, orig)
 
