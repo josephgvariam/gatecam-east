@@ -55,7 +55,7 @@ def text_recognize(inputFilePath, boxes):
     img = cv2.imread(inputFilePath)
 
     for box in boxes:
-        crop = img[box.startY : box.endY, box.startX : box.endX]
+        crop = img[box['startY'] : box['endY'], box['startX'] : box['endX']]
         text = pytesseract.image_to_string(crop, config=config)
 
         textBoxes.append({
