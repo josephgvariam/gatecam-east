@@ -89,6 +89,18 @@ def drawTextBoxes(inputFilePath, textBoxes):
     resultFilePath = inputFilePath[:n] + '/result.jpg'
     cv2.imwrite(resultFilePath, img)
 
+def fixImage(img):
+    img = cv2.resize(img, None, fx=1.5, fy=1.5, interpolation=cv2.INTER_CUBIC)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    kernel = np.ones((1, 1), np.uint8)
+    img = cv2.dilate(img, kernel, iterations=1)
+    img = cv2.erode(img, kernel, iterations=1)
+
+    img = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
+
+    return img
+
 def text_recognize(inputFilePath, boxes):
     # Define config parameters.
     # '-l eng'  for using the English language
@@ -108,6 +120,8 @@ def text_recognize(inputFilePath, boxes):
 
         cropFilePath = cropFilePathPre + '/crop' + str(cropCount) + '.jpg'
         cv2.imwrite(cropFilePath, crop)
+
+        crop = fixImage(crop)
 
         text = pytesseract.image_to_string(crop, config=config)
         print('crop saved: '+cropFilePath+', text: '+text)
