@@ -119,9 +119,10 @@ def text_recognize(inputFilePath, boxes):
         crop = img[box['startY'] : box['endY'], box['startX'] : box['endX'], : ]
 
         cropFilePath = cropFilePathPre + '/crop' + str(cropCount) + '.jpg'
-        cv2.imwrite(cropFilePath, crop)
+
 
         crop = fixImage(crop)
+        cv2.imwrite(cropFilePath, crop)
 
         text = pytesseract.image_to_string(crop, config=config)
         print('crop saved: '+cropFilePath+', text: '+text)
